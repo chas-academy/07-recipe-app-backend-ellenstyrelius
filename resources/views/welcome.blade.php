@@ -13,11 +13,13 @@
         <style>
             html, body {
                 background-color: #fff;
-                color: #636b6f;
+                color: darkseagreen;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
                 height: 100vh;
                 margin: 0;
+                font-size: 60px;
+                letter-spacing: 1px;
             }
 
             .full-height {
@@ -30,10 +32,6 @@
                 justify-content: center;
             }
 
-            .position-ref {
-                position: relative;
-            }
-
             .top-right {
                 position: absolute;
                 right: 10px;
@@ -44,28 +42,25 @@
                 text-align: center;
             }
 
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
+            a {
+                color: darksalmon;
+                font-size: 24px;
+                font-weight: 100;
+                padding: 2px 5px;
                 text-decoration: none;
                 text-transform: uppercase;
+                border: 1px dashed darksalmon;
             }
 
-            .m-b-md {
-                margin-bottom: 30px;
+            a:hover {
+                background: antiquewhite;
+                transition: 0.3s;
             }
         </style>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
+            <!-- @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
@@ -77,20 +72,13 @@
                         @endif
                     @endauth
                 </div>
-            @endif
+            @endif -->
 
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div>
+                    <p>recipes API</p>
+                    <p>\(°-°)/</p>
+                    <a href="http://recipe-app.ellenstyrelius.chas.academy" target="_blank">go here to search for recipes</a>
                 </div>
             </div>
         </div>
