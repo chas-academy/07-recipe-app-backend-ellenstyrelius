@@ -17,12 +17,12 @@ class CreateRecipesTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('label');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('url');
-            $table->integer('yield');
-            // $table->json('ingredientLines');
-            // $table->json('healthLabels');
-            // $table->json('dietLabels');
+            $table->integer('yield')->nullable();
+            $table->array('ingredientLines');
+            $table->array('healthLabels')->nullable();
+            $table->array('dietLabels')->nullable();
         });
     }
 

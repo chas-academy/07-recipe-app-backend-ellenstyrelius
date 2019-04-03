@@ -11,15 +11,6 @@ class SavedRecipesTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = \Faker\Factory::create();
-
-        for ($i = 0; $i < 5; $i++) {
-            SavedRecipe::create(
-                {
-                'label': $faker->
-                'image': $faker->
-                }
-            ) 
-        }
+        //
     }
 }
