@@ -9,6 +9,6 @@ class RecipeController extends Controller
 {
     public function index()
     {
-        return Recipe:all();
+        return Recipe::all();
     }
 }

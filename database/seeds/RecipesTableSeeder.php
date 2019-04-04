@@ -13,8 +13,6 @@ class RecipesTableSeeder extends Seeder
      */
     public function run()
     {
-        Recipe::truncate(); //för att vara säker på att få helt ny fejkdata varje gång seedern körs
-
         $faker = \Faker\Factory::create();
 
         for ($i = 0; $i < 50; $i++) {

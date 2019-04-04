@@ -19,6 +19,23 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('recipes', function() {
-    return Recipes::all();
+Route::get('recipes', function () {
+    return Recipe::all();
+});
+
+
+Route::get('recipes/{id}', function ($id) {
+    return Recipe::find($id);
+});
+
+Route::get('saved-recipes', function () {
+    return SavedRecipe::all();
+});
+
+Route::post('saved-recipes', function (Request $request) {
+    return SavedRecipe::create($request->all);
+});
+
+Route::get('saved-recipes/{id}', function ($id) {
+    return SavedRecipe::find($id);
 });
