@@ -28,36 +28,33 @@ class RecipesTableSeeder extends Seeder
         DB::table('recipes')->delete();
         $jsonPasta = File::get('database/data/pasta.json');
         $recipesPasta = json_decode($jsonPasta);
+        $jsonPizza = File::get('database/data/pizza.json');
+        $recipesPizza = json_decode($jsonPizza);
+        $jsonPotato = File::get('database/data/potato.json');
+        $recipesPotato = json_decode($jsonPotato);
 
-        foreach ($recipesPasta as $recipe) {
-            $ingredients = $recipe->recipe->ingredientLines;
-            $ingredientsJson = json_encode($ingredients);
-            $dietLabels = $recipe->recipe->dietLabels;
-            $dietLabelsJson = json_encode($dietLabels);
-            $healthLabels = $recipe->recipe->healthLabels;
-            $healthLabelsJson = json_encode($healthLabels);
+        function seedRecipes($recipes) 
+        {
+            foreach ($recipes as $recipe) {
+                $ingredientsJson = json_encode($recipe->recipe->ingredientLines);
+                $dietLabelsJson = json_encode($recipe->recipe->dietLabels);
+                $healthLabelsJson = json_encode($recipe->recipe->healthLabels);
 
-            Recipe::create([
-                'label' => $recipe->recipe->label,
-                'image' => $recipe->recipe->image,
-                'url' => $recipe->recipe->url,
-                'yield' => $recipe->recipe->yield,
-                'ingredientLines' => $ingredientsJson,
-                'dietLabels' => $dietLabelsJson,
-                'healthLabels' => $healthLabelsJson
-            ]);
+                Recipe::create([
+                    'label' => $recipe->recipe->label,
+                    'image' => $recipe->recipe->image,
+                    'url' => $recipe->recipe->url,
+                    'yield' => $recipe->recipe->yield,
+                    'ingredientLines' => $ingredientsJson,
+                    'dietLabels' => $dietLabelsJson,
+                    'healthLabels' => $healthLabelsJson
+                ]);
+            }
         }
 
-        // for ($i = 0; $i < 100; $i++) {
-        //     Recipe::create([
-        //         'label' => $recipesPasta->recipe->label,
-        //         'image' => $recipesPasta->recipe->image,
-        //         'url' => $recipesPasta->recipe->url,
-        //         'yield' => $recipesPasta->recipe->yield,
-        //         'ingredientLines' => $recipesPasta->recipe->ingredientLines,
-        //         'dietLabels' => $recipesPasta->recipe->dietLabels,
-        //         'healthLabels' => $recipesPasta->recipe->healthLabels,
-        //     ]);
-        // }
+        seedRecipes($recipesPasta);
+        seedRecipes($recipesPizza);
+        seedRecipes($recipesPotato);
+
     }
 }
