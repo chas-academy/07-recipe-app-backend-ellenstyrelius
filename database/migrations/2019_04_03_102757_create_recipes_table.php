@@ -20,9 +20,9 @@ class CreateRecipesTable extends Migration
             $table->string('image')->nullable();
             $table->string('url');
             $table->integer('yield')->nullable();
-            $table->string('ingredientLines');
-            $table->string('healthLabels')->nullable();
-            $table->string('dietLabels')->nullable();
+            $table->json('ingredientLines');
+            $table->json('healthLabels')->nullable();
+            $table->json('dietLabels')->nullable();
         });
     }
 

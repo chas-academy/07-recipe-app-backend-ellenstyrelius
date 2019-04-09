@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 
 use App\Recipe;
+use App\SavedRecipe;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +34,14 @@ Route::get('saved-recipes', function () {
 });
 
 Route::post('saved-recipes', function (Request $request) {
-    return SavedRecipe::create($request->all);
+    return SavedRecipe::create($request->all());
 });
 
-Route::get('saved-recipes/{id}', function ($id) {
-    return SavedRecipe::find($id);
+// Route::get('saved-recipes/{id}', function ($id) {
+//     return SavedRecipe::find($id);
+// });
+
+Route::delete('saved-recipes/{id}', function ($id) {
+    SavedRecipe::find($id)->delete();
+    return 204;
 });

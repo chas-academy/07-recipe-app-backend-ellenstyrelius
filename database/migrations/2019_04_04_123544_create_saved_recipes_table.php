@@ -19,6 +19,9 @@ class CreateSavedRecipesTable extends Migration
             $table->string('label');
             $table->string('image');
 
+            $table->integer('recipe_id')->unsigned()->index()->nullable();
+            $table->foreign('recipe_id')->references('id')->on('recipes');
+
             $table->integer('user_id')->unsigned()->index()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
         });
