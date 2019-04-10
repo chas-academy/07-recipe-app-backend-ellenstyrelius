@@ -11,4 +11,9 @@ class RecipeController extends Controller
     {
         return Recipe::all();
     }
+
+    public function show($recipe) 
+    {
+        return Recipe::findOrFail($recipe);
+    }
 }

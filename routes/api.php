@@ -20,28 +20,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('recipes', function () {
-    return Recipe::all();
-});
+Route::get('recipes', 'RecipeController@index');
+
+Route::get('recipes/{recipe}', 'RecipeController@show');
 
 
-Route::get('recipes/{id}', function ($id) {
-    return Recipe::find($id);
-});
+/* ------------ routes specific to users!! ------------ */
+/* ------------ has to be modified later?? ------------ */
+/* ------------ will need jwt and stuffz?? ------------ */
 
-Route::get('saved-recipes', function () {
-    return SavedRecipe::all();
-});
+Route::get('saved-recipes', 'SavedRecipeController@index');
 
-Route::post('saved-recipes', function (Request $request) {
-    return SavedRecipe::create($request->all());
-});
+Route::post('saved-recipes', 'SavedRecipeController@store');
 
-// Route::get('saved-recipes/{id}', function ($id) {
-//     return SavedRecipe::find($id);
-// });
+Route::delete('saved-recipes/{savedRecipe}', 'SavedRecipeController@destroy');
 
-Route::delete('saved-recipes/{id}', function ($id) {
-    SavedRecipe::find($id)->delete();
-    return 204;
-});
+Route::delete('saved-recipes', 'SavedRecipeController@destroyAll');
