@@ -14,6 +14,6 @@ class RecipeController extends Controller
 
     public function show($recipe) 
     {
-        return Recipe::findOrFail($recipe);
+        return Recipe::find($recipe);
     }
 }

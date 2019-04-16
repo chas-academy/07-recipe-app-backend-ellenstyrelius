@@ -19,7 +19,7 @@ class SavedRecipeController extends Controller
 
     public function destroy($savedRecipe)
     {
-        SavedRecipe::findOrFail($savedRecipe)->delete();
+        SavedRecipe::find($savedRecipe)->delete();
         return 204;
         // return redirect('/saved-recipes');
     }
