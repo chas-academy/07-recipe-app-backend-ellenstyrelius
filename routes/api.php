@@ -20,7 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::post('logout', 'Auth\LoginController@logout');
 // Route::post('register', 'Auth\RegisterController@register');
 
-Route::get('/recipes', 'RecipeController@index');
+Route::get('recipes', 'RecipeController@index');
+Route::get('recipes/search={input}', 'RecipeController@filter');
 Route::get('recipes/{recipe}', 'RecipeController@show');
 
 /* ------------ routes specific to users!! ------------ */

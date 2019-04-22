@@ -11,28 +11,24 @@ class RecipeController extends Controller
     {
         $recipes = Recipe::all();
         foreach ($recipes as $recipe) {
-            $recipe->ingredientLines = json_decode($recipe->ingredientLines);
-            $recipe->dietLabels = json_decode($recipe->dietLabels);
-            $recipe->healthLabels = json_decode($recipe->healthLabels);
+            Recipe::decodeJson($recipe);
+        } 
+        return $recipes;
+    }
 
-            return $recipes;
-        }
-        
+    public function filter($input)
+    {        
+        $recipes = Recipe::where('label', 'like', '%'.$input.'%')->get();
+        foreach ($recipes as $recipe) {
+            Recipe::decodeJson($recipe);
+        } 
+        return $recipes;
     }
 
     public function show($recipe) 
     {
         $recipeData = Recipe::find($recipe);
-        function decode($recipeData)
-        {
-            $recipeData->ingredientLines = json_decode($recipeData->ingredientLines);
-            $recipeData->dietLabels = json_decode($recipeData->dietLabels);
-            $recipeData->healthLabels = json_decode($recipeData->healthLabels);
-
-            return $recipeData;
-        }
-
-        $recipeDecoded = decode($recipeData);
+        $recipeDecoded = Recipe::decodeJson($recipeData);
         return $recipeDecoded;
     }
 }
