@@ -18,7 +18,9 @@ class RecipeController extends Controller
 
     public function filter($input)
     {        
-        $recipes = Recipe::where('label', 'like', '%'.$input.'%')->get();
+        $recipes = Recipe::where('label', 'like', '%'.$input.'%')
+            ->orWhere('ingredientLines', 'like', '%'.$input.'%')
+            ->get();
         foreach ($recipes as $recipe) {
             Recipe::decodeJson($recipe);
         } 
