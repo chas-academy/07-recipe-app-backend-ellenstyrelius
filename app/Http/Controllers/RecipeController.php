@@ -16,15 +16,19 @@ class RecipeController extends Controller
         return $recipes;
     }
 
-    public function filter($input)
+    public function filter(Request $request)
     {        
-        $recipes = Recipe::where('label', 'like', '%'.$input.'%')
-            ->orWhere('ingredientLines', 'like', '%'.$input.'%')
-            ->get();
-        foreach ($recipes as $recipe) {
-            Recipe::decodeJson($recipe);
-        } 
-        return $recipes;
+        if ($request->has('q')) {
+            $input = $request->query('q');
+            $recipes = Recipe::where('label', 'like', '%'.$input.'%')
+                ->orWhere('ingredientLines', 'like', '%'.$input.'%')
+                ->orderBy('label', 'asc')
+                ->get();
+            foreach ($recipes as $recipe) {
+                Recipe::decodeJson($recipe);
+            }
+            return $recipes;
+        }
     }
 
     public function show($recipe) 
