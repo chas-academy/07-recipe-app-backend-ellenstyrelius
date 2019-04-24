@@ -10,7 +10,7 @@ class Recipe extends Model
         'label', 'image', 'url', 'ingredientLines', 'yield', 'healthLabels', 'dietLabels'
     ];
 
-    public static function decodeJson($recipe)
+    public static function decodeJsonStrings($recipe)
     {
         $recipe->ingredientLines = json_decode($recipe->ingredientLines);
         $recipe->dietLabels = json_decode($recipe->dietLabels);
