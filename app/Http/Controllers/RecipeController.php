@@ -29,7 +29,6 @@ class RecipeController extends Controller
         $input = $request->query('q');
         $diet = $request->query('diet');
         $recipes = array();
-        $recipesInput = array();
         $nrOfInputWords = null;
         $inputRecipeIds = array();
         $nrOfDietWords = null;
@@ -37,13 +36,6 @@ class RecipeController extends Controller
         $recipeIds = array();
         $filteredRecipeIds = array();
     
-        //////////////////////////////////
-        // hämta bara ID:n och jämför arrayer med ID!!!!
-        // hämta sedan recept baserat på ID:n
-
-        // filtrera ut de ID:n som förekommer i en array lika många gånger som antal sökord
-        // eller pusha resultat-arrayer till ny array och jämföra arrayerna
-
         if ($input) {
             $inputSearch = explode(' ', $input);
             $nrOfInputWords = count($inputSearch);
