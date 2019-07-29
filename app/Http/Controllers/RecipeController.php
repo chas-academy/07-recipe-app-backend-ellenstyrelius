@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use App\Recipe;
 
 class RecipeController extends Controller
@@ -28,6 +29,13 @@ class RecipeController extends Controller
         $input = $request->query('q');
         $diet = $request->query('diet');
         $recipes = array();
+        $recipesInput = array();
+        $recipesHealth = array();
+        $recipesDiet = array();
+        $recipesHealthDiet = array();
+        $dietRecipeIds = array();
+        $recipeIds = array();
+        $filteredRecipeIds = array();
     
         if ($input) {
 
@@ -40,7 +48,7 @@ class RecipeController extends Controller
                         ->get();
                     foreach ($inputRecipes as $recipe) {
                         Recipe::decodeJsonStrings($recipe);
-                        $recipes[] = $recipe;
+                        $recipesInput[] = $recipe;
                     }
                 }
             } 
@@ -51,39 +59,71 @@ class RecipeController extends Controller
                     ->get();
                 foreach ($inputRecipes as $recipe) {
                     Recipe::decodeJsonStrings($recipe);
-                    $recipes[] = $recipe;
+                    $recipesInput[] = $recipe;
                 }
             }
         }
+
+        //////////////////////////////////
+        // hämta bara ID:n och jämför arrayer med ID!!!!
+        // hämta sedan recept baserat på ID:n
+
+        // filtrera ut de ID:n som förekommer i en array lika många gånger som antal sökord
+        // eller pusha resultat-arrayer till ny array och jämföra arrayerna
 
         if ($diet) {
             $dietSearch = explode(',', $diet);
-
-            // push the results from both foreach into own arrays and compare them? 
-            // or just compare them as strings? 
-            // this to only get recipes that has all of the labels
-            // then push the result into recipes array
-
-            foreach ($dietSearch as $healthLabel) {
-                $healthRecipes = Recipe::where('healthLabels', 'like', '%' . $healthLabel . '%')
-                    ->orderBy('label', 'asc')
+            $nrOfWords = count($dietSearch);
+            
+            if ($nrOfWords === 1) {
+                $dietRecipes = Recipe::where('healthLabels', 'like', '%' . $diet . '%')
+                    ->orWhere('dietLabels', 'like', '%' . $diet . '%')
                     ->get();
-                foreach ($healthRecipes as $recipe) {
-                    Recipe::decodeJsonStrings($recipe);
-                    $recipes[] = $recipe;
-                }  
+                foreach ($dietRecipes as $dietRecipe) {
+                    $dietRecipeIds[] = $dietRecipe->id;
+                }
             }
 
-            foreach ($dietSearch as $dietLabel) {
-                $dietRecipes = Recipe::where('dietLabels', 'like', '%' . $dietLabel . '%')
+            if ($nrOfWords > 1) {
+                foreach ($dietSearch as $searchWord) {
+                    $dietRecipes = Recipe::where('healthLabels', 'like', '%' . $searchWord . '%')
+                        ->orWhere('dietLabels', 'like', '%' . $searchWord . '%')
+                        ->get();
+                    foreach ($dietRecipes as $dietRecipe) {
+                        $dietRecipeIds[] = $dietRecipe->id;
+                    }
+                }
+            }
+
+            foreach ($dietRecipeIds as $id) {
+                $recipeIds[] = $id;
+            }
+
+            $occurrenceOfIds = array_count_values($recipeIds);
+            
+            foreach ($occurrenceOfIds as $key => $value) {
+                if ($value === $nrOfWords) {
+                    $filteredRecipeIds[] = $key;
+                }
+            }
+
+            foreach ($filteredRecipeIds as $id) {
+                $filteredRecipes = Recipe::where('id', $id)
                     ->orderBy('label', 'asc')
                     ->get();
-                foreach ($dietRecipes as $recipe) {
+                foreach ($filteredRecipes as $recipe) {
                     Recipe::decodeJsonStrings($recipe);
                     $recipes[] = $recipe;
                 }
             }
         }
+        
+        // $recipesDietCollection = collect($recipesDiet);
+        // $recipesDietHealth = $recipesDietCollection->intersect($recipesHealth);
+        // $recipesDietHealth->all();
+
+        // $recipesDietHealth = array_intersect($recipesHealth, $recipesDiet);
+        // $recipes = array_intersect($recipesInput, $recipesDietHealth);
 
         return $recipes;
     }
