@@ -11,28 +11,21 @@ use App\SavedRecipe;
 | which is assigned the "api" middleware group.
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-/* ------ auth routes that may be needed????? ------ */
-// Route::post('login', 'Auth\LoginController@login');
-// Route::post('logout', 'Auth\LoginController@logout');
-// Route::post('register', 'Auth\RegisterController@register');
-
 Route::get('recipes', 'RecipeController@index');
 Route::get('recipes/search', 'RecipeController@filter');
 Route::get('recipes/{recipe}', 'RecipeController@show');
 
-/* ------------ routes specific to users!! ------------ */
-/* ------------ has to be modified later?? ------------ */
-/* ------------ will need jwt and stuffz?? ------------ */
-// Route::group(['middleware' => 'auth:api'], function () {
-Route::get('saved-recipes', 'SavedRecipeController@index');
+/* ------ auth routes  ------ */
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', 'AuthController@login');
+    Route::post('register', 'AuthController@register');
 
-Route::post('saved-recipes', 'SavedRecipeController@store');
-
-Route::delete('saved-recipes/{savedRecipe}', 'SavedRecipeController@destroy');
-
-Route::delete('saved-recipes', 'SavedRecipeController@destroyAll');
-// });
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::get('logout', 'AuthController@logout');
+        Route::get('user', 'AuthController@user');
+        Route::get('saved-recipes', 'SavedRecipeController@index');
+        Route::post('saved-recipes', 'SavedRecipeController@store');
+        Route::delete('saved-recipes/{savedRecipe}', 'SavedRecipeController@destroy');
+        Route::delete('saved-recipes', 'SavedRecipeController@destroyAll');
+    });
+});
