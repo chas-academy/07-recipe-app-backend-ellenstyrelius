@@ -39,27 +39,14 @@ class RecipeController extends Controller
         if ($input) {
             $inputSearch = explode(' ', $input);
             $nrOfInputWords = count($inputSearch);
-
-            if ($nrOfInputWords === 1) {
-                $inputRecipes = Recipe::where('label', 'like', '%' . $input . '%')
-                    ->orWhere('ingredientLines', 'like', '%' . $input . '%')
+            foreach ($inputSearch as $searchWord) {
+                $inputRecipes = Recipe::where('label', 'like', '%' . $searchWord . '%')
+                    ->orWhere('ingredientLines', 'like', '%' . $searchWord . '%')
                     ->get();
                 foreach ($inputRecipes as $inputRecipe) {
                     $inputRecipeIds[] = $inputRecipe->id;
                 }
             }
-
-            if ($nrOfInputWords > 1) {
-                foreach ($inputSearch as $searchWord) {
-                    $inputRecipes = Recipe::where('label', 'like', '%' . $searchWord . '%')
-                        ->orWhere('ingredientLines', 'like', '%' . $searchWord . '%')
-                        ->get();
-                    foreach ($inputRecipes as $inputRecipe) {
-                        $inputRecipeIds[] = $inputRecipe->id;
-                    }
-                }
-            } 
-
             foreach ($inputRecipeIds as $id) {
                 $recipeIds[] = $id;
             }
@@ -68,27 +55,14 @@ class RecipeController extends Controller
         if ($diet) {
             $dietSearch = explode(',', $diet);
             $nrOfDietWords = count($dietSearch);
-            
-            if ($nrOfDietWords === 1) {
-                $dietRecipes = Recipe::where('healthLabels', 'like', '%' . $diet . '%')
-                    ->orWhere('dietLabels', 'like', '%' . $diet . '%')
+            foreach ($dietSearch as $searchWord) {
+                $dietRecipes = Recipe::where('healthLabels', 'like', '%' . $searchWord . '%')
+                    ->orWhere('dietLabels', 'like', '%' . $searchWord . '%')
                     ->get();
                 foreach ($dietRecipes as $dietRecipe) {
                     $dietRecipeIds[] = $dietRecipe->id;
                 }
             }
-
-            if ($nrOfDietWords > 1) {
-                foreach ($dietSearch as $searchWord) {
-                    $dietRecipes = Recipe::where('healthLabels', 'like', '%' . $searchWord . '%')
-                        ->orWhere('dietLabels', 'like', '%' . $searchWord . '%')
-                        ->get();
-                    foreach ($dietRecipes as $dietRecipe) {
-                        $dietRecipeIds[] = $dietRecipe->id;
-                    }
-                }
-            }
-        
             foreach ($dietRecipeIds as $id) {
                 $recipeIds[] = $id;
             }
@@ -96,13 +70,11 @@ class RecipeController extends Controller
 
         $occurrenceOfIds = array_count_values($recipeIds);
         $nrOfWords = $nrOfInputWords + $nrOfDietWords;
-
         foreach ($occurrenceOfIds as $key => $value) {
             if ($value === $nrOfWords) {
                 $filteredRecipeIds[] = $key;
             }
         }
-
         foreach ($filteredRecipeIds as $id) {
             $filteredRecipes = Recipe::where('id', $id)
                 ->orderBy('label', 'asc')
