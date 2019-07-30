@@ -7,25 +7,41 @@ use App\SavedRecipe;
 
 class SavedRecipeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return SavedRecipe::all();
+        return SavedRecipe::where('user_id', $request->user()->id)
+        ->get();
     }
 
     public function store(Request $request)
     {
-        return SavedRecipe::create($request->all());
+        
+        $savedRecipe = new SavedRecipe(
+            ['label' => $request->label,
+            'image' => $request->image,
+            'recipe_id' => $request->id,
+            'user_id' => $request->user()->id]
+        );
+        $savedRecipe->save();
+        return response()->json(
+            ['message' => 'Recipe saved!']
+        );
     }
 
-    public function destroy($savedRecipe)
+    public function destroy($recipeId, Request $request)
     {
-        SavedRecipe::find($savedRecipe)->delete();
+        SavedRecipe::where('user_id', $request->user()->id)
+            ->where('recipe_id', $recipeId)
+            ->delete();
         return 204;
         // return redirect('/saved-recipes');
     }
 
-    public function destroyAll() {
-        SavedRecipe::whereNotNull('id')->delete();
+    public function destroyAll(Request $request) 
+    {
+        SavedRecipe::where('user_id', $request->user()->id)
+            ->whereNotNull('id')
+            ->delete();
         return 204;
         // return redirect('/saved-recipes');
     }
