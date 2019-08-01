@@ -15,17 +15,25 @@ class SavedRecipeController extends Controller
 
     public function store(Request $request)
     {
-        
-        $savedRecipe = new SavedRecipe(
-            ['label' => $request->label,
-            'image' => $request->image,
-            'recipe_id' => $request->id,
-            'user_id' => $request->user()->id]
-        );
-        $savedRecipe->save();
-        return response()->json(
-            ['message' => 'Recipe saved!']
-        );
+        $alreadySavedRecipe = SavedRecipe::where('user_id', $request->user()->id)
+            ->where('recipe_id', $request->id)
+            ->get();
+        if (count($alreadySavedRecipe) < 1) {
+            $savedRecipe = new SavedRecipe(
+                ['label' => $request->label,
+                'image' => $request->image,
+                'recipe_id' => $request->id,
+                'user_id' => $request->user()->id]
+            );
+            $savedRecipe->save();
+            return response()->json(
+                ['message' => 'Recipe saved!']
+            );
+        } elseif (count($alreadySavedRecipe) > 0) {
+            return response()->json(
+                ['message' => 'Recipe already saved']
+            );
+        }
     }
 
     public function destroy($recipeId, Request $request)
