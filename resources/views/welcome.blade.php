@@ -64,7 +64,7 @@
                 <div>
                     <p>recipes API</p>
                     <p>\(°-°)/</p>
-                    <a href="http://recipe-app.ellenstyrelius.chas.academy" target="_blank">go here to search for recipes</a>
+                    <a href="https://pastapizzapotato.netlify.com" target="_blank">go here to search for recipes</a>
                 </div>
             </div>
         </div>
